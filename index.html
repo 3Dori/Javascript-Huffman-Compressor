@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Text Compressor</title>
+</head>
+<body>
+<div id="selection">
+	<button id="btn-input">Input text</button>
+	or
+  <input type="file" id="file-upload" />
+	<button id="btn-upload">Upload an file</button>
+</div>
+
+<textarea id="txt-in" cols="70" rows="30"></textarea>
+<button id="btn-compress">Compress</button>
+<script type="text/javascript" src="huffman.js"></script>
+<script type="text/javascript">
+(function() {
+  var textarea = document.getElementById("txt-in");
+  var btnInput = document.getElementById("btn-input");
+  var btnUpload = document.getElementById("btn-upload");
+  var btnComp = document.getElementById("btn-compress");
+  var fileUpload = document.getElementById("file-upload");
+
+  btnInput.addEventListener("click", function() {
+    textarea.style.display = "block";
+  });
+
+  btnUpload.addEventListener("click", function() {
+    var file, reader, bin;
+    textarea.style.display = "none";
+    file = fileUpload.files[0];
+    if (file) {
+      reader = new FileReader();
+      reader.readAsBinaryString(file);
+      reader.addEventListener("load", function() {
+        bin = reader.result;
+        new HuffCoder(bin);
+      });
+    }
+  });
+
+  btnComp.addEventListener("click", function() {
+    var text = textarea.value;
+    var test = new HuffCoder();
+    var code = test.huffEncode(text);
+    test.huffDecode(code);
+  });
+})();
+</script>
+</body>
+</html>
